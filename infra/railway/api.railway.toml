@@ -1,0 +1,22 @@
+# ViralForge Railway — API service
+# Link this file (or set dockerBuildTarget=api) on the api Railway service.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+watchPatterns = ["apps/api/**", "packages/**", "pnpm-lock.yaml", "Dockerfile"]
+
+[build.docker]
+buildTarget = "api"
+
+[deploy]
+startCommand = "node dist/main.js"
+healthcheckPath = "/health/live"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required vars (set in Railway; never commit values):
+# APP_ENV, DATABASE_URL, REDIS_URL, AUTH_SESSION_SECRET, FIELD_ENCRYPTION_KEY,
+# OBJECT_STORAGE_*, PUBLIC_WEB_URL, API_BASE_URL
+# AUTH_PROVIDER must not be "local" in staging/production.

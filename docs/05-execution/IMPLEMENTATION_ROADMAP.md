@@ -14,7 +14,7 @@ Work in vertical slices. A sprint is complete only when code, migrations, tests,
 - OpenTelemetry, structured logs, CI, migration process.
 - Architecture fitness tests preventing boundary violations.
 
-Exit: one command boots the local stack; staging deploy is healthy; one sample job travels API → outbox → queue → worker → result.
+Exit: one command boots the local stack; staging deploy configs exist (`infra/railway/`; live staging deferred R-15); one sample job travels API → outbox → queue → worker → result. Evidence: [`SPRINT_0_EVIDENCE.md`](SPRINT_0_EVIDENCE.md).
 
 ## [Sprint 1 — Upload and media intelligence](SPRINT_1_BACKLOG.md)
 

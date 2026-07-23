@@ -19,5 +19,8 @@ This is an index, not a replacement for ADR files. Accepted history is append-on
 | ADR-017 | accepted | Next.js App Router for apps/web; /v1 rewrites; @viralforge/ui | `docs/06-governance/adr/ADR-017-nextjs-web.md` |
 | ADR-018 | accepted | S3-compatible storage via AWS SDK v3; workspace-scoped keys; signed URL redaction | `docs/06-governance/adr/ADR-018-object-storage.md` |
 | ADR-019 | accepted | Provider ports fake-first; budgets/timeouts; YouTube Option 1 music handoff | `docs/06-governance/adr/ADR-019-provider-ports.md` |
+| ADR-020 | accepted | OpenTelemetry API/SDK; InMemory exporters; W3C traceparent on jobs | `docs/06-governance/adr/ADR-020-opentelemetry.md` |
+| ADR-021 | accepted | Monorepo Dockerfile targets; Railway migrate-as-release; non-root; FFmpeg media-only | `docs/06-governance/adr/ADR-021-containers-railway.md` |
+| ADR-022 | accepted | GitHub Actions CI; Gitleaks; Dependency Review; CodeQL; Trivy; drift gates | `docs/06-governance/adr/ADR-022-ci-supply-chain.md` |
 
-Sprint 0 must create numbered ADRs for ORM, authentication implementation, object-storage providers, transcription provider, media service language, CI/scanning, error tracking, and any deviation from these baselines.
+Sprint 0 ADRs for ORM, auth, storage, providers, OTel, containers, and CI are recorded. Error-tracking vendor deferred (`R-16`).

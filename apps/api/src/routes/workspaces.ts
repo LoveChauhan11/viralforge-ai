@@ -1,7 +1,4 @@
-import {
-  authorize,
-  LOCAL_USER_HEADER,
-} from "@viralforge/auth";
+import { authorize, LOCAL_USER_HEADER } from "@viralforge/auth";
 import { normalizePageLimit } from "@viralforge/contracts";
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
@@ -25,10 +22,7 @@ function headerStore(headers: Record<string, string | string[] | undefined>) {
   };
 }
 
-export async function registerWorkspaceRoutes(
-  app: FastifyInstance,
-  deps: ApiDeps,
-): Promise<void> {
+export async function registerWorkspaceRoutes(app: FastifyInstance, deps: ApiDeps): Promise<void> {
   app.get("/v1/workspaces/:workspaceId", async (request) => {
     const params = workspaceParams.parse(request.params);
     const principal = await deps.auth.authenticate(headerStore(request.headers));

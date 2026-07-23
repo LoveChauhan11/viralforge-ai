@@ -76,33 +76,43 @@ describe("InMemoryObjectStorage", () => {
   });
 });
 
-describe.skipIf(!process.env.OBJECT_STORAGE_ACCESS_KEY_ID)("S3CompatibleObjectStorage (MinIO)", () => {
-  it("round-trips against configured endpoint", async () => {
-    const storage = createObjectStorage({
-      mode: "s3",
-      endpoint: process.env.OBJECT_STORAGE_ENDPOINT ?? "http://127.0.0.1:9000",
-      region: process.env.OBJECT_STORAGE_REGION ?? "us-east-1",
-      bucket: process.env.OBJECT_STORAGE_BUCKET ?? "viralforge-local",
-      accessKeyId: process.env.OBJECT_STORAGE_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.OBJECT_STORAGE_SECRET_ACCESS_KEY!,
-      forcePathStyle: true,
+describe.skipIf(!process.env.OBJECT_STORAGE_ACCESS_KEY_ID)(
+  "S3CompatibleObjectStorage (MinIO)",
+  () => {
+    it("round-trips against configured endpoint", async () => {
+      const storage = createObjectStorage({
+        mode: "s3",
+        endpoint: process.env.OBJECT_STORAGE_ENDPOINT ?? "http://127.0.0.1:9000",
+        region: process.env.OBJECT_STORAGE_REGION ?? "us-east-1",
+        bucket: process.env.OBJECT_STORAGE_BUCKET ?? "viralforge-local",
+        accessKeyId: process.env.OBJECT_STORAGE_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.OBJECT_STORAGE_SECRET_ACCESS_KEY!,
+        forcePathStyle: true,
+      });
+      const key = buildObjectKey({
+        workspaceId: workspaceA,
+        purpose: "source",
+        objectId,
+        fileName: `it-${Date.now()}.bin`,
+      });
+      const body = new TextEncoder().encode("minio-proof");
+      await storage.putObject(
+        {
+          workspaceId: workspaceA,
+          key,
+          contentType: "application/octet-stream",
+          byteSize: body.byteLength,
+        },
+        body,
+      );
+      expect(await storage.headObject(workspaceA, key)).toMatchObject({
+        byteSize: body.byteLength,
+      });
+      const signed = await storage.createSignedGetUrl(workspaceA, key, 60);
+      expect(signed.url).toContain("X-Amz-");
+      expect(redactSignedUrl(signed.url)).not.toMatch(/X-Amz-/);
+      await storage.deleteObject(workspaceA, key);
+      expect(await storage.headObject(workspaceA, key)).toBeNull();
     });
-    const key = buildObjectKey({
-      workspaceId: workspaceA,
-      purpose: "source",
-      objectId,
-      fileName: `it-${Date.now()}.bin`,
-    });
-    const body = new TextEncoder().encode("minio-proof");
-    await storage.putObject(
-      { workspaceId: workspaceA, key, contentType: "application/octet-stream", byteSize: body.byteLength },
-      body,
-    );
-    expect(await storage.headObject(workspaceA, key)).toMatchObject({ byteSize: body.byteLength });
-    const signed = await storage.createSignedGetUrl(workspaceA, key, 60);
-    expect(signed.url).toContain("X-Amz-");
-    expect(redactSignedUrl(signed.url)).not.toMatch(/X-Amz-/);
-    await storage.deleteObject(workspaceA, key);
-    expect(await storage.headObject(workspaceA, key)).toBeNull();
-  });
-});
+  },
+);

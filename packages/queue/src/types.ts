@@ -9,6 +9,8 @@ export type JobEnvelope<TPayload = unknown> = {
   payload: TPayload;
   requestId?: string;
   outboxEventId?: string;
+  /** W3C traceparent for cross-service correlation (S0-13). */
+  traceparent?: string;
 };
 
 export type OutboxPublishPayload = {

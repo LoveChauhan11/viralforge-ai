@@ -1,0 +1,21 @@
+title = "ViralForge gitleaks"
+
+[extend]
+usesDefaultRules = true
+
+[allowlist]
+description = "Non-secret placeholders and local examples"
+paths = [
+  '''(.*?)(\.|/)(env\.example)$''',
+  '''docs/.*''',
+  '''memory-bank/.*''',
+  '''\.github/.*\.md$''',
+]
+regexes = [
+  '''replace-with-at-least-32-local-characters''',
+  '''minioadmin''',
+  '''viralforge:viralforge@''',
+  '''example\.invalid''',
+  '''sk-live-secret''',
+  '''\[redacted\]''',
+]

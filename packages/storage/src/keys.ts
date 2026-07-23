@@ -10,8 +10,7 @@ export class StorageError extends Error {
 
 const PURPOSE_RE = /^[a-z][a-z0-9_-]{0,63}$/;
 const SAFE_FILE_RE = /^[A-Za-z0-9._-]{1,180}$/;
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Keys always start with workspaceId so tenants cannot address each other's objects.

@@ -33,7 +33,11 @@ Original, licensed, or creator-owned audio may be rendered automatically when ri
 - [AI evaluation and golden dataset](docs/03-engineering/AI_EVALUATION_AND_GOLDEN_DATASET.md)
 - [Trend and music intelligence](docs/03-engineering/TREND_AND_MUSIC.md)
 - [Security and privacy](docs/03-engineering/SECURITY_AND_PRIVACY.md)
+- [Local setup](docs/04-delivery/LOCAL_SETUP.md)
+- [CI and supply chain](docs/04-delivery/CI_AND_SUPPLY_CHAIN.md)
 - [Railway deployment](docs/04-delivery/RAILWAY_DEPLOYMENT.md)
+- [Provider extension](docs/03-engineering/PROVIDER_EXTENSION.md)
+- [Sprint 0 evidence](docs/05-execution/SPRINT_0_EVIDENCE.md)
 - [Testing strategy](docs/04-delivery/TEST_STRATEGY.md)
 - [End-to-end acceptance-test catalogue](docs/04-delivery/END_TO_END_ACCEPTANCE_TEST_CATALOG.md)
 - [Operations](docs/04-delivery/OPERATIONS.md)
@@ -83,15 +87,14 @@ Clone the repository into Cursor, create a feature branch, and open [CURSOR_MAST
 
 Requires Node.js 22+ (or 24) and pnpm 9.15.9 via Corepack (`corepack enable && corepack prepare pnpm@9.15.9 --activate`). If Corepack cannot write to the Node install directory, use `npx pnpm@9.15.9`.
 
+Full walkthrough: [LOCAL_SETUP.md](docs/04-delivery/LOCAL_SETUP.md). Sprint 0 proof: [SPRINT_0_EVIDENCE.md](docs/05-execution/SPRINT_0_EVIDENCE.md).
+
 ```bash
 pnpm install
-pnpm build
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm infra:up    # needs Docker: Postgres, Redis, MinIO
+cp .env.example .env
+pnpm infra:up    # Docker: Postgres, Redis, MinIO
+pnpm migrate && pnpm seed
+pnpm build && pnpm lint && pnpm typecheck && pnpm test
 ```
 
-Copy `.env.example` to `.env` for local defaults. Fake AI/auth providers need no paid keys.
-
-Executable code, CI, containers, and Railway service configuration are deliberate Sprint 0 outputs. The repository currently contains the complete product/architecture/execution specification and safe bootstrap controls; it does not pretend unbuilt services are deployable.
+Fake AI/auth providers need no paid keys. Start API, scheduler, worker-general, and web (see local setup). Foundation job on **Create** proves API → outbox → worker → result.

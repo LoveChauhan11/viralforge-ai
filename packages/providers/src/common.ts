@@ -1,9 +1,5 @@
 export type ProviderErrorCode =
-  | "timeout"
-  | "budget_exceeded"
-  | "unavailable"
-  | "invalid_input"
-  | "rejected";
+  "timeout" | "budget_exceeded" | "unavailable" | "invalid_input" | "rejected";
 
 export class ProviderError extends Error {
   readonly code: ProviderErrorCode;
@@ -42,11 +38,7 @@ export function createBudget(maxCalls = 100, maxInputChars = 200_000): ProviderB
   return { maxCalls, maxInputChars, callsUsed: 0, inputCharsUsed: 0 };
 }
 
-export function consumeBudget(
-  budget: ProviderBudget,
-  provider: string,
-  inputChars: number,
-): void {
+export function consumeBudget(budget: ProviderBudget, provider: string, inputChars: number): void {
   if (budget.callsUsed >= budget.maxCalls) {
     throw new ProviderError("budget_exceeded", provider, "call budget exceeded", {
       retryable: false,
@@ -83,9 +75,7 @@ export async function withTimeout<T>(
 
 const SENSITIVE_KEY = /(secret|token|password|authorization|api[_-]?key|signed[_-]?url|email)/i;
 
-export function redactProviderFields(
-  value: Record<string, unknown>,
-): Record<string, unknown> {
+export function redactProviderFields(value: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [key, raw] of Object.entries(value)) {
     if (SENSITIVE_KEY.test(key)) {

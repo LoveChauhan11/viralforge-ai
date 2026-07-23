@@ -56,8 +56,7 @@ describe("package dependency direction", () => {
 
   it("workers do not depend on web/UI packages", () => {
     const workerPkgs = packages.filter(
-      (p) =>
-        p.pkg.name?.startsWith("@viralforge/worker-") || p.rel.startsWith("workers/"),
+      (p) => p.pkg.name?.startsWith("@viralforge/worker-") || p.rel.startsWith("workers/"),
     );
     expect(workerPkgs.length).toBeGreaterThan(0);
     for (const worker of workerPkgs) {

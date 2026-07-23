@@ -1,6 +1,6 @@
 import { loadServiceConfig, toLogSafeConfig } from "@viralforge/config";
 import { createDb, pingDatabase } from "@viralforge/database";
-import { createLogger } from "@viralforge/observability";
+import { createLogger, initTelemetry, shutdownTelemetry } from "@viralforge/observability";
 import { QUEUE_GENERAL, type JobEnvelope } from "@viralforge/queue";
 import { startServiceRuntime } from "@viralforge/service-kit";
 import { Worker } from "bullmq";
@@ -11,6 +11,7 @@ import { processFoundationJob, type FoundationPayload } from "./foundation.js";
 const serviceName = "worker-general";
 const config = loadServiceConfig(serviceName);
 const logger = createLogger(serviceName);
+initTelemetry(serviceName);
 const databaseUrl =
   config.databaseUrl ?? "postgresql://viralforge:viralforge@localhost:5432/viralforge";
 const redisUrl = config.redisUrl ?? "redis://localhost:6379";
@@ -77,6 +78,7 @@ const runtime = await startServiceRuntime({
   onShutdown: async () => {
     await bullWorker.close();
     await connection.quit();
+    await shutdownTelemetry();
     logger.info("shutting down", { workerId });
   },
 });

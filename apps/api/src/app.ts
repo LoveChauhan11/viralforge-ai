@@ -1,6 +1,8 @@
 import { AuthError } from "@viralforge/auth";
 import { problem } from "@viralforge/contracts";
 import { pingDatabase as defaultPing } from "@viralforge/database";
+import { getTelemetry } from "@viralforge/observability";
+import { context, propagation, SpanStatusCode, trace, type Span } from "@opentelemetry/api";
 import Fastify, { type FastifyInstance } from "fastify";
 import { randomUUID } from "node:crypto";
 import { ZodError } from "zod";
@@ -11,6 +13,8 @@ import { registerWorkspaceRoutes } from "./routes/workspaces.js";
 declare module "fastify" {
   interface FastifyRequest {
     requestId: string;
+    otelSpan?: Span;
+    traceparent?: string;
   }
 }
 
@@ -54,6 +58,33 @@ export async function buildApiApp(deps: ApiDeps): Promise<FastifyInstance> {
     if (deps.rateLimit) {
       await deps.rateLimit(requestId, `${request.method} ${request.url}`);
     }
+
+    if (request.url.startsWith("/health")) return;
+
+    const tracer = getTelemetry()?.tracer ?? trace.getTracer("viralforge");
+    const parentCtx = propagation.extract(context.active(), {
+      traceparent:
+        typeof request.headers.traceparent === "string" ? request.headers.traceparent : undefined,
+    });
+    const span = tracer.startSpan(
+      "http.request",
+      {
+        attributes: {
+          "http.method": request.method,
+          "http.route": request.routeOptions?.url ?? request.url,
+          requestId,
+        },
+      },
+      parentCtx,
+    );
+    request.otelSpan = span;
+    const spanCtx = trace.setSpan(parentCtx, span);
+    const carrier: Record<string, string> = {};
+    propagation.inject(spanCtx, carrier);
+    if (carrier.traceparent) {
+      request.traceparent = carrier.traceparent;
+      void reply.header("traceparent", carrier.traceparent);
+    }
   });
 
   app.addHook("onResponse", async (request, reply) => {
@@ -63,10 +94,19 @@ export async function buildApiApp(deps: ApiDeps): Promise<FastifyInstance> {
       url: request.url,
       statusCode: reply.statusCode,
     });
+    const span = request.otelSpan;
+    if (span) {
+      span.setAttribute("http.status_code", reply.statusCode);
+      span.setStatus({
+        code: reply.statusCode >= 500 ? SpanStatusCode.ERROR : SpanStatusCode.OK,
+      });
+      span.end();
+    }
   });
 
   app.setErrorHandler((error, request, reply) => {
     const requestId = request.requestId ?? randomUUID();
+    request.otelSpan?.recordException(error instanceof Error ? error : new Error(String(error)));
 
     if (error instanceof AuthError) {
       void reply

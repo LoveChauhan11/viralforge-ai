@@ -22,6 +22,9 @@
     "infra:up": "node ./scripts/infra.mjs up",
     "infra:down": "node ./scripts/infra.mjs down",
     "infra:reset": "node ./scripts/infra.mjs reset",
+    "docker:build": "node ./scripts/docker-build.mjs",
+    "check:migration-drift": "node ./scripts/check-migration-drift.mjs",
+    "check:contract-drift": "node ./scripts/check-contract-drift.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

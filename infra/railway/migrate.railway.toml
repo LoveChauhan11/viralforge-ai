@@ -1,0 +1,16 @@
+# ViralForge Railway — Database migrate (release / pre-deploy job)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[build.docker]
+buildTarget = "migrate"
+
+[deploy]
+startCommand = "node packages/database/dist/migrate.js"
+restartPolicyType = "NEVER"
+
+# Run ONCE per release before rolling API/workers.
+# Required: DATABASE_URL
+# Do not scale replicas. Do not use as a long-running service.

@@ -107,11 +107,7 @@ export const jobs = pgTable(
     ...timestamps,
   },
   (t) => [
-    uniqueIndex("jobs_workspace_type_idempotency_uidx").on(
-      t.workspaceId,
-      t.type,
-      t.idempotencyKey,
-    ),
+    uniqueIndex("jobs_workspace_type_idempotency_uidx").on(t.workspaceId, t.type, t.idempotencyKey),
     index("jobs_queue_state_created_idx").on(t.queue, t.state, t.createdAt),
     index("jobs_workspace_entity_idx").on(t.workspaceId, t.entityType, t.entityId),
     index("jobs_lease_expires_idx").on(t.leaseExpiresAt),

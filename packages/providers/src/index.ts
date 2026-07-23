@@ -11,11 +11,7 @@ export { FakeModelProvider } from "./model.js";
 export type { ModelProvider, ModelCompleteInput, ModelCompleteOutput } from "./model.js";
 
 export { FakeTranscriptionProvider } from "./transcription.js";
-export type {
-  TranscriptionProvider,
-  TranscribeInput,
-  TranscribeOutput,
-} from "./transcription.js";
+export type { TranscriptionProvider, TranscribeInput, TranscribeOutput } from "./transcription.js";
 
 export { FakeTrendProvider } from "./trends.js";
 export type { TrendProvider, ListTrendsInput, TrendItem } from "./trends.js";

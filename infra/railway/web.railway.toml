@@ -1,0 +1,17 @@
+# ViralForge Railway — Web service
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[build.docker]
+buildTarget = "web"
+
+[deploy]
+startCommand = "node server.js"
+healthcheckPath = "/"
+healthcheckTimeout = 45
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required: APP_ENV, PUBLIC_WEB_URL, API_ORIGIN (internal API URL for rewrites)

@@ -25,7 +25,10 @@ export default async function SettingsPage({
         />
       ) : null}
       {params.error === "missing" ? (
-        <ErrorState title="Missing values" description="Both user ID and workspace ID are required." />
+        <ErrorState
+          title="Missing values"
+          description="Both user ID and workspace ID are required."
+        />
       ) : null}
 
       <form className="vf-panel vf-stack" action={saveLocalSession}>
@@ -55,7 +58,8 @@ export default async function SettingsPage({
           Save local session
         </button>
         <p className="vf-page-lead" style={{ marginBottom: 0 }}>
-          Run <code>pnpm seed</code> and copy the printed <code>userId</code> / <code>workspaceId</code>.
+          Run <code>pnpm seed</code> and copy the printed <code>userId</code> /{" "}
+          <code>workspaceId</code>.
         </p>
       </form>
     </Shell>

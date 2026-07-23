@@ -3,8 +3,7 @@ import type { AuthProvider, AuthRequestHeaders, Principal } from "./types.js";
 
 export const LOCAL_USER_HEADER = "x-viralforge-user-id";
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type LocalAuthOptions = {
   appEnv: "local" | "test" | "ci" | "staging" | "production";

@@ -61,3 +61,21 @@ Every deploy records commit, migration, image digest, feature flags, and operato
 ## Support tooling
 
 Admin views are read-only by default and tenant-audited. They show safe job timeline, asset technical facts, publication state, quota, and correlation IDs. Never expose tokens, signed URLs, full prompts, or private media to unauthorized support staff.
+
+## Local troubleshooting
+
+| Symptom | Check |
+|---|---|
+| `pnpm install` engine failure | Node 22–24; use `npx pnpm@9.15.9` if Corepack cannot write |
+| Infra unhealthy | Docker Desktop running; `pnpm infra:down && pnpm infra:up` |
+| API ready 503 | `DATABASE_URL` / Redis; migrate applied |
+| Cross-tenant 404 vs 403 | Expected: missing resource looks like 404 when unauthorized to avoid leaks |
+| Duplicate foundation jobs | Client must send same idempotency key; check outbox uniqueness |
+| Worker idle | Scheduler running; Redis up; outbox claim leases not stuck |
+| Docker build empty packages | Ensure `*.tsbuildinfo` ignored (`.dockerignore`); rebuild without host cache pollution |
+| MinIO access denied | Bucket `viralforge-local`; path-style endpoint from `.env.example` |
+| Playwright failures | `pnpm --filter @viralforge/web test:e2e`; Chromium install via Playwright |
+| Format check fails on Dockerfile | Dockerfiles/toml are in `.prettierignore` |
+| CI secrets false positive | Justify allowlist in `.gitleaks.toml`; security owner ack |
+
+Full local boot: [LOCAL_SETUP.md](./LOCAL_SETUP.md). CI policy: [CI_AND_SUPPLY_CHAIN.md](./CI_AND_SUPPLY_CHAIN.md).

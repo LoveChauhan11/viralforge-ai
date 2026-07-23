@@ -1,24 +1,18 @@
-import {
-  createLocalAuthProvider,
-  LOCAL_USER_HEADER,
-  type AuthProvider,
-} from "@viralforge/auth";
+import { createLocalAuthProvider, LOCAL_USER_HEADER, type AuthProvider } from "@viralforge/auth";
 import { loadServiceConfig, toLogSafeConfig, type AppEnv } from "@viralforge/config";
-import {
-  createDb,
-  findActiveMembership,
-  recordAuthzAudit,
-  userExists,
-} from "@viralforge/database";
-import { createLogger } from "@viralforge/observability";
+import { createDb, findActiveMembership, recordAuthzAudit, userExists } from "@viralforge/database";
+import { createLogger, initTelemetry, shutdownTelemetry } from "@viralforge/observability";
 import { buildApiApp } from "./app.js";
 
 const serviceName = "api";
 const config = loadServiceConfig(serviceName);
 const logger = createLogger(serviceName);
+initTelemetry(serviceName);
 
 if (config.authProvider !== "local") {
-  throw new Error(`AUTH_PROVIDER=${config.authProvider} is not implemented yet (S0-06 local only).`);
+  throw new Error(
+    `AUTH_PROVIDER=${config.authProvider} is not implemented yet (S0-06 local only).`,
+  );
 }
 
 const databaseUrl =
@@ -37,8 +31,7 @@ const app = await buildApiApp({
   db,
   auth,
   memberships: {
-    findActiveMembership: (workspaceId, userId) =>
-      findActiveMembership(db, workspaceId, userId),
+    findActiveMembership: (workspaceId, userId) => findActiveMembership(db, workspaceId, userId),
   },
   audit: {
     record: (event) => recordAuthzAudit(db, event),
@@ -60,6 +53,7 @@ logger.info("listening", {
 
 const close = async (): Promise<void> => {
   await app.close();
+  await shutdownTelemetry();
 };
 
 process.once("SIGTERM", () => {

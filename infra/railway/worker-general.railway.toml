@@ -1,0 +1,18 @@
+# ViralForge Railway — General worker
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[build.docker]
+buildTarget = "worker-general"
+
+[deploy]
+startCommand = "node dist/main.js"
+healthcheckPath = "/health/live"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required: APP_ENV, DATABASE_URL, REDIS_URL
+# Private networking only.

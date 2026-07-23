@@ -6,18 +6,15 @@ import {
   markOutboxPublished,
   pingDatabase,
 } from "@viralforge/database";
-import { createLogger } from "@viralforge/observability";
-import {
-  BullMqQueuePublisher,
-  dispatchOutboxBatch,
-  type JobEnvelope,
-} from "@viralforge/queue";
+import { createLogger, initTelemetry, shutdownTelemetry } from "@viralforge/observability";
+import { BullMqQueuePublisher, dispatchOutboxBatch, type JobEnvelope } from "@viralforge/queue";
 import { startServiceRuntime } from "@viralforge/service-kit";
 import { randomUUID } from "node:crypto";
 
 const serviceName = "scheduler";
 const config = loadServiceConfig(serviceName);
 const logger = createLogger(serviceName);
+initTelemetry(serviceName);
 const databaseUrl =
   config.databaseUrl ?? "postgresql://viralforge:viralforge@localhost:5432/viralforge";
 const redisUrl = config.redisUrl ?? "redis://localhost:6379";
@@ -74,6 +71,7 @@ const runtime = await startServiceRuntime({
   onShutdown: async () => {
     if (timerRef.current) clearInterval(timerRef.current);
     await publisher.close();
+    await shutdownTelemetry();
     logger.info("shutting down");
   },
 });

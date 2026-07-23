@@ -11,6 +11,7 @@ export type CreateJobInput = {
   requestId?: string;
   requestedBy?: string;
   maxAttempts?: number;
+  traceparent?: string;
 };
 
 export type CreateJobResult = {
@@ -75,6 +76,7 @@ export async function createJobWithOutbox(
             payload: input.payload ?? {},
             requestId: input.requestId,
             outboxEventId,
+            ...(input.traceparent ? { traceparent: input.traceparent } : {}),
           },
         },
       });

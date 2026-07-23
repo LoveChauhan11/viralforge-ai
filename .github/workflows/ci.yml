@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22.14.0"
+  APP_ENV: test
+  AI_PROVIDER: fake
+  TRANSCRIPTION_PROVIDER: fake
+  TREND_PROVIDER: manual
+  NOTIFICATION_PROVIDER: fake
+  AUTH_PROVIDER: local
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: viralforge
+          POSTGRES_PASSWORD: viralforge
+          POSTGRES_DB: viralforge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U viralforge -d viralforge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://viralforge:viralforge@localhost:5432/viralforge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Format check
+        run: pnpm format:check
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Build
+        run: pnpm build
+      - name: Migrate
+        run: pnpm migrate
+      - name: Test
+        run: pnpm test
+      - name: Migration drift
+        run: pnpm check:migration-drift
+      - name: Contract build
+        run: pnpm check:contract-drift
+
+  secrets:
+    name: secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  containers:
+    name: containers
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build api
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: api
+          tags: viralforge-api:ci
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build migrate
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: migrate
+          tags: viralforge-migrate:ci
+          load: true
+          cache-from: type=gha
+      - name: Build web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: web
+          tags: viralforge-web:ci
+          load: true
+          cache-from: type=gha
+      - name: Build worker-general
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: worker-general
+          tags: viralforge-worker-general:ci
+          load: true
+          cache-from: type=gha
+      - name: Trivy scan api image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: viralforge-api:ci
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+
+  analyze:
+    name: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3

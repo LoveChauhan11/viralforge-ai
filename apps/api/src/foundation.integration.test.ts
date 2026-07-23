@@ -1,7 +1,4 @@
-import {
-  createLocalAuthProvider,
-  LOCAL_USER_HEADER,
-} from "@viralforge/auth";
+import { createLocalAuthProvider, LOCAL_USER_HEADER } from "@viralforge/auth";
 import {
   claimOutboxBatch,
   createDb,
@@ -18,15 +15,14 @@ import {
   type Database,
 } from "@viralforge/database";
 import { createLogger } from "@viralforge/observability";
-import {
-  dispatchOutboxBatch,
-  InMemoryQueuePublisher,
-  type JobEnvelope,
-} from "@viralforge/queue";
+import { dispatchOutboxBatch, InMemoryQueuePublisher, type JobEnvelope } from "@viralforge/queue";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { FastifyInstance } from "fastify";
 import { buildApiApp } from "./app.js";
-import { processFoundationJob, type FoundationPayload } from "../../../workers/general/src/foundation.js";
+import {
+  processFoundationJob,
+  type FoundationPayload,
+} from "../../../workers/general/src/foundation.js";
 
 const databaseUrl =
   process.env.DATABASE_URL ?? "postgresql://viralforge:viralforge@localhost:5432/viralforge";

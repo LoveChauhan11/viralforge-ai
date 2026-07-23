@@ -10,8 +10,8 @@ export default async function CreatePage() {
     <Shell>
       <h1 className="vf-page-title">Create</h1>
       <p className="vf-page-lead">
-        Sprint 0 foundation job: submit once, watch progress, and confirm terminal state. Full upload
-        wizard arrives in Sprint 1.
+        Sprint 0 foundation job: submit once, watch progress, and confirm terminal state. Full
+        upload wizard arrives in Sprint 1.
       </p>
       {!session.userId || !session.workspaceId ? (
         <EmptyState

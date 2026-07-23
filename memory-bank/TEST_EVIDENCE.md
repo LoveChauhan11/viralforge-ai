@@ -16,3 +16,7 @@
 | 2026-07-23 | local Playwright Chromium | S0-10 | `pnpm --filter @viralforge/web test:e2e` (18); next build; typecheck/lint | pass | brand+nav all routes; no horizontal scroll; skip-link keyboard; 360/768/1440 |
 | 2026-07-23 | local MinIO + Postgres | S0-11 | `@viralforge/storage` (5 incl MinIO); `@viralforge/database` objects IT (1); typecheck/lint | pass | workspace-scoped keys; signed URL redaction; soft-delete idempotent; no local-disk store |
 | 2026-07-23 | local unit | S0-12 | `@viralforge/providers` (7); typecheck/lint | pass | fake-only; no fetch; budgets/timeouts; Zod IO; Option 1 music handoff; field redaction |
+| 2026-07-23 | local unit + API/worker regression | S0-13 | `@viralforge/observability` (3); queue/API/worker tests green; typecheck/lint | pass | same-traceId API→outbox→worker; log redaction; job/queue/provider metrics |
+| 2026-07-23 | Docker Desktop | S0-14 | `docker build` targets api/web/migrate/scheduler/worker-*; `id`=viralforge; media has ffmpeg; web has standalone server.js | pass | ADR-021; infra/railway/*; no durable VOLUME |
+| 2026-07-23 | local | S0-15 | `pnpm format:check`; `pnpm check:migration-drift`; `pnpm check:contract-drift`; workflows + ADR-022 present | pass | `.github/workflows/ci.yml`; dependency-review; `.gitleaks.toml`; CI_AND_SUPPLY_CHAIN.md |
+| 2026-07-23 | local | S0-16 | handoff docs + traceability/risk/env updates | pass | SPRINT_0_EVIDENCE.md; LOCAL_SETUP.md; PROVIDER_EXTENSION.md |

@@ -9,7 +9,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src --max-warnings=0",
@@ -17,6 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@viralforge/observability": "workspace:*",
     "bullmq": "^5.41.0",
     "ioredis": "^5.5.0"
   },

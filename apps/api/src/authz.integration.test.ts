@@ -1,7 +1,4 @@
-import {
-  createLocalAuthProvider,
-  LOCAL_USER_HEADER,
-} from "@viralforge/auth";
+import { createLocalAuthProvider, LOCAL_USER_HEADER } from "@viralforge/auth";
 import {
   createDb,
   findActiveMembership,

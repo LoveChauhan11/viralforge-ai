@@ -15,10 +15,7 @@ export type ServiceRuntimeOptions = {
   /** Readiness: dependencies available. */
   ready?: () => HealthStatus | Promise<HealthStatus>;
   /** Application routes. Return true if handled. */
-  handleRequest?: (
-    req: IncomingMessage,
-    res: ServerResponse,
-  ) => boolean | Promise<boolean>;
+  handleRequest?: (req: IncomingMessage, res: ServerResponse) => boolean | Promise<boolean>;
   onShutdown?: () => void | Promise<void>;
   shutdownTimeoutMs?: number;
 };
@@ -88,9 +85,7 @@ export async function startServiceRuntime(options: ServiceRuntimeOptions): Promi
         }
         const handled = await handleHealth(req, res, options);
         if (handled) return;
-        const appHandled = options.handleRequest
-          ? await options.handleRequest(req, res)
-          : false;
+        const appHandled = options.handleRequest ? await options.handleRequest(req, res) : false;
         if (!appHandled) {
           sendJson(res, 404, {
             type: "about:blank",

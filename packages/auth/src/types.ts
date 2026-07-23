@@ -1,11 +1,7 @@
 export type WorkspaceRole = "owner" | "admin" | "creator" | "editor" | "viewer";
 
 export type Permission =
-  | "workspace:read"
-  | "workspace:manage_members"
-  | "job:create"
-  | "job:read"
-  | "job:cancel";
+  "workspace:read" | "workspace:manage_members" | "job:create" | "job:read" | "job:cancel";
 
 export type Principal = {
   userId: string;
@@ -25,12 +21,7 @@ export type AuthRequestHeaders = {
 
 export type AuthDecision = {
   allowed: boolean;
-  reason:
-    | "ok"
-    | "unauthenticated"
-    | "forbidden_role"
-    | "not_a_member"
-    | "inactive_membership";
+  reason: "ok" | "unauthenticated" | "forbidden_role" | "not_a_member" | "inactive_membership";
   permission?: Permission;
   workspaceId?: string;
   role?: WorkspaceRole;
@@ -52,10 +43,7 @@ export interface AuthProvider {
 }
 
 export interface MembershipStore {
-  findActiveMembership(
-    workspaceId: string,
-    userId: string,
-  ): Promise<WorkspaceMembership | null>;
+  findActiveMembership(workspaceId: string, userId: string): Promise<WorkspaceMembership | null>;
 }
 
 export interface AuthzAuditWriter {

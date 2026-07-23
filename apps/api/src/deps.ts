@@ -1,6 +1,6 @@
 import type { AuthProvider, AuthzAuditWriter, MembershipStore } from "@viralforge/auth";
 import type { Database } from "@viralforge/database";
-import type { Logger } from "@viralforge/observability";
+import type { Logger, TelemetryHandle } from "@viralforge/observability";
 import type { AppEnv } from "@viralforge/config";
 
 export type ApiDeps = {
@@ -12,6 +12,7 @@ export type ApiDeps = {
   memberships: MembershipStore;
   audit: AuthzAuditWriter;
   logger: Logger;
+  telemetry?: TelemetryHandle;
   /** Optional override for readiness (tests). */
   pingDatabase?: (url: string) => Promise<void>;
   /** Rate-limit hook; throw or send 429. Default is no-op. */

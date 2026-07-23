@@ -39,9 +39,7 @@ describe("API platform (S0-07)", () => {
     expect(withId.headers["x-request-id"]).toBe("req-platform-1");
 
     const generated = await app.inject({ method: "GET", url: "/health/live" });
-    expect(generated.headers["x-request-id"]).toMatch(
-      /^[0-9a-f-]{36}$/i,
-    );
+    expect(generated.headers["x-request-id"]).toMatch(/^[0-9a-f-]{36}$/i);
   });
 
   it("liveness stays ok even when readiness would fail", async () => {

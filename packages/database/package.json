@@ -9,13 +9,17 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist", "drizzle"],
+  "files": [
+    "dist",
+    "drizzle"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "migrate": "tsx src/migrate.ts",
+    "migrate:node": "node dist/migrate.js",
     "seed": "tsx src/seed.ts",
     "generate": "drizzle-kit generate"
   },

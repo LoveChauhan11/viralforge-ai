@@ -1,0 +1,18 @@
+# ViralForge Railway — Scheduler / outbox dispatcher
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[build.docker]
+buildTarget = "scheduler"
+
+[deploy]
+startCommand = "node dist/main.js"
+healthcheckPath = "/health/live"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required: APP_ENV, DATABASE_URL, REDIS_URL
+# Private networking only — do not expose publicly.

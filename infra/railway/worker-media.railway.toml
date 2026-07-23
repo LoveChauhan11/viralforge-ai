@@ -1,0 +1,19 @@
+# ViralForge Railway — Media worker (FFmpeg in image)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[build.docker]
+buildTarget = "worker-media"
+
+[deploy]
+startCommand = "node dist/main.js"
+healthcheckPath = "/health/live"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required: APP_ENV, DATABASE_URL, REDIS_URL, OBJECT_STORAGE_*
+# Use ephemeral disk only for TMPDIR. Never mount durable media volumes.
+# Scale CPU/RAM per docs/04-delivery/RAILWAY_DEPLOYMENT.md

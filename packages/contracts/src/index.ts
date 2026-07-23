@@ -49,7 +49,8 @@ export const DEFAULT_PAGE_LIMIT = 20;
 export const MAX_PAGE_LIMIT = 100;
 
 export function normalizePageLimit(raw: unknown): number {
-  const n = typeof raw === "string" ? Number(raw) : typeof raw === "number" ? raw : DEFAULT_PAGE_LIMIT;
+  const n =
+    typeof raw === "string" ? Number(raw) : typeof raw === "number" ? raw : DEFAULT_PAGE_LIMIT;
   if (!Number.isFinite(n) || n < 1) return DEFAULT_PAGE_LIMIT;
   return Math.min(Math.floor(n), MAX_PAGE_LIMIT);
 }

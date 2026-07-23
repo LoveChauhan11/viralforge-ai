@@ -1,4 +1,5 @@
-import type { QueuePublisher, JobEnvelope } from "./types.js";
+import { recordQueueSample, withExtractedContext, withSpan } from "@viralforge/observability";
+import type { JobEnvelope, QueuePublisher } from "./types.js";
 
 export type ClaimedOutboxEvent = {
   id: string;
@@ -33,14 +34,29 @@ export async function dispatchOutboxBatch(options: {
   let published = 0;
   let errors = 0;
 
+  recordQueueSample(claimed.length, 0, "outbox");
+
   for (const event of claimed) {
+    const envelope = event.payload.envelope;
     try {
-      const { queueName, envelope } = event.payload;
-      await options.publisher.publish(queueName, {
-        ...envelope,
-        outboxEventId: event.id,
+      await withExtractedContext({ traceparent: envelope.traceparent }, async () => {
+        await withSpan(
+          "outbox.dispatch",
+          {
+            outboxEventId: event.id,
+            jobId: envelope.jobId,
+            workspaceId: event.workspaceId,
+            queue: event.payload.queueName,
+          },
+          async () => {
+            await options.publisher.publish(event.payload.queueName, {
+              ...envelope,
+              outboxEventId: event.id,
+            });
+            await options.store.markPublished(event.id);
+          },
+        );
       });
-      await options.store.markPublished(event.id);
       published += 1;
     } catch {
       await options.store.markDispatchError(event.id, "outbox_publish_failed");

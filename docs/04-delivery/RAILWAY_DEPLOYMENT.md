@@ -17,9 +17,9 @@ Use an external S3-compatible object store. Do not depend on Railway persistent 
 
 ## Build strategy
 
-Use one monorepo Dockerfile with named targets, or service-specific Dockerfiles sharing base stages. Pin Node, pnpm, FFmpeg, and OS image versions. Run as non-root. Include fonts required by templates. Produce an SBOM and scan the final image in CI.
+Use the monorepo root `Dockerfile` with named targets (`api`, `web`, `worker-*`, `scheduler`, `migrate`). Pin Node **22.14**, pnpm **9.15.9**, and install FFmpeg only on `worker-media`. Run as non-root (`viralforge`). Railway service samples: `infra/railway/`.
 
-Each service has a narrow start command and health endpoint. Database migrations run as an explicit release command/job, never concurrently from every API replica.
+Each service has a narrow start command and health endpoint. Database migrations run via the **`migrate`** image as an explicit release/pre-deploy job, never concurrently from every API replica.
 
 ## Required environment groups
 

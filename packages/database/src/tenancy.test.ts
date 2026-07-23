@@ -1,13 +1,6 @@
 import { and, eq, ne } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
-import {
-  createDb,
-  jobs,
-  newId,
-  users,
-  workspaceMembers,
-  workspaces,
-} from "./index.js";
+import { createDb, jobs, newId, users, workspaceMembers, workspaces } from "./index.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -74,8 +67,6 @@ describe.skipIf(!databaseUrl)("tenant isolation", () => {
 describe("ids", () => {
   it("generates uuid-like identifiers", async () => {
     const { newId: id } = await import("./ids.js");
-    expect(id()).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-    );
+    expect(id()).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
 });

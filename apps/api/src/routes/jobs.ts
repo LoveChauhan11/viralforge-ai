@@ -1,10 +1,8 @@
 import { AuthError, authorize } from "@viralforge/auth";
-import {
-  cancelJob,
-  createJobWithOutbox,
-  getJob,
-} from "@viralforge/database";
+import { cancelJob, createJobWithOutbox, getJob } from "@viralforge/database";
 import { QUEUE_GENERAL } from "@viralforge/queue";
+import { withSpan } from "@viralforge/observability";
+import { context, trace } from "@opentelemetry/api";
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import type { ApiDeps } from "../deps.js";
@@ -67,18 +65,37 @@ export async function registerJobRoutes(app: FastifyInstance, deps: ApiDeps): Pr
       targetType: "job",
     });
 
-    const created = await createJobWithOutbox(deps.db, {
-      workspaceId: membership.workspaceId,
-      type: "foundation.sample",
-      idempotencyKey: body.idempotencyKey,
-      queue: QUEUE_GENERAL,
-      requestId: request.requestId,
-      requestedBy: membership.userId,
-      payload: {
-        mode: body.mode,
-        message: body.message ?? "foundation",
-      },
-    });
+    const createUnderHttp = async () =>
+      withSpan(
+        "job.create",
+        {
+          workspaceId: membership.workspaceId,
+          "job.type": "foundation.sample",
+          requestId: request.requestId,
+        },
+        async (span) => {
+          const result = await createJobWithOutbox(deps.db, {
+            workspaceId: membership.workspaceId,
+            type: "foundation.sample",
+            idempotencyKey: body.idempotencyKey,
+            queue: QUEUE_GENERAL,
+            requestId: request.requestId,
+            requestedBy: membership.userId,
+            ...(request.traceparent ? { traceparent: request.traceparent } : {}),
+            payload: {
+              mode: body.mode,
+              message: body.message ?? "foundation",
+            },
+          });
+          span.setAttribute("jobId", result.jobId);
+          span.setAttribute("job.created", result.created);
+          return result;
+        },
+      );
+
+    const created = request.otelSpan
+      ? await context.with(trace.setSpan(context.active(), request.otelSpan), createUnderHttp)
+      : await createUnderHttp();
 
     const job = await getJob(deps.db, created.jobId, membership.workspaceId);
     if (!job) {

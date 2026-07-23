@@ -20,15 +20,17 @@
 
 ## Required checks
 
-Once Sprint 0 creates the scripts, run:
-
 ```bash
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm test:e2e
+pnpm format:check
+pnpm check:migration-drift
+pnpm check:contract-drift
 pnpm build
 ```
+
+When UI or the foundation flow changes, also run `pnpm test:e2e`. CI required jobs: `quality`, `secrets`, `containers`, `analyze`, `dependency-review` (see `docs/04-delivery/CI_AND_SUPPLY_CHAIN.md`).
 
 Also verify migrations, tenancy isolation, idempotency, worker recovery, fake-provider mode, and responsive layouts when affected.
 

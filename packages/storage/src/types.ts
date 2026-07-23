@@ -22,7 +22,11 @@ export interface ObjectStorage {
     key: string,
   ): Promise<{ contentType: string; byteSize: number } | null>;
   deleteObject(workspaceId: string, key: string): Promise<void>;
-  createSignedGetUrl(workspaceId: string, key: string, ttlSeconds: number): Promise<SignedUrlResult>;
+  createSignedGetUrl(
+    workspaceId: string,
+    key: string,
+    ttlSeconds: number,
+  ): Promise<SignedUrlResult>;
   createSignedPutUrl(
     workspaceId: string,
     key: string,

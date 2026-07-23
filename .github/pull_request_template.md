@@ -20,6 +20,8 @@
 - [ ] E2E tests where relevant
 - [ ] Build/container build
 - [ ] Migration/seed repeatability where relevant
+- [ ] Migration drift check (`pnpm check:migration-drift`)
+- [ ] Secret/dependency CI gates green
 - [ ] Tenant isolation and idempotency where relevant
 - [ ] 360/768/1440 responsive checks where relevant
 

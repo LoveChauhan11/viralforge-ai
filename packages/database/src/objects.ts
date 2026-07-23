@@ -33,11 +33,7 @@ export async function registerObjectReference(db: Database, input: RegisterObjec
   return id;
 }
 
-export async function getObjectReference(
-  db: Database,
-  workspaceId: string,
-  objectKey: string,
-) {
+export async function getObjectReference(db: Database, workspaceId: string, objectKey: string) {
   const rows = await db
     .select()
     .from(objectReferences)

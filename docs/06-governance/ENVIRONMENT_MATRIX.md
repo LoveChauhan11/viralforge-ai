@@ -3,17 +3,18 @@
 | Concern | Local | CI | Staging | Production |
 |---|---|---|---|---|
 | Purpose | Development | Deterministic verification | Integration/UAT | Real creators |
-| Providers | Fake by default | Fake only | Fake plus explicitly enabled sandbox/real tests | Approved real providers with fallback |
-| Database | Container PostgreSQL | Ephemeral PostgreSQL | Railway managed PostgreSQL | Railway managed PostgreSQL with backup/PITR |
-| Redis | Container Redis | Ephemeral Redis | Railway managed Redis | Railway managed Redis |
-| Object storage | Local S3-compatible service | Ephemeral S3-compatible service | External staging bucket | External production bucket |
-| Auth | Safe local adapter | Test adapter | Real auth test tenant | Real auth |
+| Providers | Fake by default | Fake only (`AI_PROVIDER=fake`, etc.) | Fake plus explicitly enabled sandbox/real tests | Approved real providers with fallback |
+| Database | Container PostgreSQL | GitHub service container PostgreSQL 16 | Railway managed PostgreSQL | Railway managed PostgreSQL with backup/PITR |
+| Redis | Container Redis | Optional (queue unit tests use fakes/mocks where needed) | Railway managed Redis | Railway managed Redis |
+| Object storage | MinIO (`viralforge-local`) | Not required for unit gates; images built only | External staging bucket | External production bucket |
+| Auth | Local adapter (`AUTH_PROVIDER=local`) | Local/test adapter only | Real auth test tenant | Real auth |
 | Media | Synthetic fixtures only | Synthetic fixtures only | Approved non-private test media | User uploads |
-| Secrets | Local `.env`, ignored | CI secret store only when unavoidable | Railway variables | Railway variables with rotation |
-| Telemetry | Console/local collector | Test assertions | Staging project | Production project with redaction/retention |
+| Secrets | Local `.env`, ignored | No paid keys; Gitleaks on PR | Railway variables | Railway variables with rotation |
+| Telemetry | Console / in-memory OTel | Test assertions on spans/metrics | Staging project | Production project with redaction/retention |
 | YouTube | Fake | Fake | Dedicated test channel when enabled | Creator OAuth |
-| Deployment | Local containers/processes | Built, not public | Railway staging project | Railway production project |
-| Data retention | Developer reset | Job lifetime | Short test retention | Policy-driven and user deletion |
+| Deployment | `pnpm` processes + `docker:build` | Workflows build images; not published | Railway staging (provision pending) | Railway production |
+| Supply chain | Local lint/test/drift | `quality`, `secrets`, `containers`, `analyze`, `dependency-review` | Same images promoted | Same images promoted |
+| Data retention | Developer reset (`infra:reset`) | Job lifetime | Short test retention | Policy-driven and user deletion |
 
 ## Promotion rules
 

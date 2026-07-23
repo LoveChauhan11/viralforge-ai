@@ -4,7 +4,10 @@ import { AuthError } from "./errors.js";
 import { createLocalAuthProvider, LOCAL_USER_HEADER } from "./local.js";
 import type { MembershipStore, Principal, WorkspaceMembership } from "./types.js";
 
-const principal: Principal = { userId: "11111111-1111-4111-8111-111111111111", authProvider: "local" };
+const principal: Principal = {
+  userId: "11111111-1111-4111-8111-111111111111",
+  authProvider: "local",
+};
 const workspaceId = "22222222-2222-4222-8222-222222222222";
 
 function membership(role: WorkspaceMembership["role"]): WorkspaceMembership {

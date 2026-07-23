@@ -18,6 +18,16 @@ Ratings: likelihood and impact are Low, Medium, or High. Owners are roles until 
 | R-12 | Scope expands before foundation is reliable | High | High | Sprint gates, traceability, explicit backlog IDs, no Sprint 1 before Sprint 0 evidence | Lead agent |
 | R-13 | Output quality is technically valid but not engaging | Medium | High | Creator feedback, rubric/evaluations, versioned strategies, analytics learning, human override | Product/AI |
 | R-14 | Processing cost makes unit economics unsustainable | Medium | High | Measure per-minute/per-render cost, proxy media, caching, model tiers, quotas | Product/Finance |
+| R-15 | Railway staging not yet provisioned; deploy docs unproven live | Medium | Medium | Configs under `infra/railway/`; provision before claiming staging healthy; local Docker proves images | Platform |
+| R-16 | No dedicated error-tracking vendor yet | Medium | Low | OTel + structured logs for Sprint 0; choose vendor ADR before production on-call | Platform |
+| R-17 | Branch protection may be unset until first successful Actions run | Medium | High | Maintainer enables required checks listed in CI_AND_SUPPLY_CHAIN.md | Maintainer |
+| R-18 | Large container images slow CI/deploys | Low | Medium | Tracked `S0-IMG`; shrink with `pnpm deploy` / multi-stage prune | Platform |
+
+## Sprint 0 review (2026-07-23)
+
+- R-01, R-05, R-06, R-11 mitigated in foundation code + CI; remain open for ongoing vigilance.
+- R-12 mitigated by S0 evidence package; Sprint 1 may start on local stack.
+- R-15–R-18 are explicit residual Sprint 0 handoff items.
 
 ## Review cadence
 

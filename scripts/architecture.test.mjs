@@ -92,6 +92,7 @@ describe("package dependency direction", () => {
       "@viralforge/storage",
       "@viralforge/providers",
       "@viralforge/ui",
+      "@viralforge/auth",
     ]) {
       expect(names.has(required), `missing ${required}`).toBe(true);
     }

@@ -10,7 +10,18 @@ const email = "local.dev@example.invalid";
 const existing = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
 if (existing[0]) {
-  console.log("[@viralforge/database] seed already applied");
+  const membership = await db
+    .select({
+      userId: workspaceMembers.userId,
+      workspaceId: workspaceMembers.workspaceId,
+    })
+    .from(workspaceMembers)
+    .where(eq(workspaceMembers.userId, existing[0].id))
+    .limit(1);
+  console.log("[@viralforge/database] seed already applied", {
+    userId: existing[0].id,
+    workspaceId: membership[0]?.workspaceId ?? null,
+  });
   process.exit(0);
 }
 

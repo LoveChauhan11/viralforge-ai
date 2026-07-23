@@ -4,21 +4,26 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
-    "start": "node dist/main.js",
-    "build": "tsc -p tsconfig.json",
+    "dev": "next dev --port 3000",
+    "start": "next start --port 3000",
+    "build": "next build",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests",
-    "test:e2e": "node ./scripts/test-e2e.mjs"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@viralforge/observability": "workspace:*",
-    "@viralforge/service-kit": "workspace:*"
+    "@viralforge/ui": "workspace:*",
+    "next": "^15.2.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.0",
     "@viralforge/tsconfig": "workspace:*",
-    "tsx": "^4.19.3",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   }

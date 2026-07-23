@@ -14,6 +14,11 @@ export type ServiceRuntimeOptions = {
   live?: () => HealthStatus | Promise<HealthStatus>;
   /** Readiness: dependencies available. */
   ready?: () => HealthStatus | Promise<HealthStatus>;
+  /** Application routes. Return true if handled. */
+  handleRequest?: (
+    req: IncomingMessage,
+    res: ServerResponse,
+  ) => boolean | Promise<boolean>;
   onShutdown?: () => void | Promise<void>;
   shutdownTimeoutMs?: number;
 };
@@ -26,6 +31,8 @@ function sendJson(res: ServerResponse, statusCode: number, body: unknown): void 
   });
   res.end(payload);
 }
+
+export { sendJson };
 
 async function handleHealth(
   req: IncomingMessage,
@@ -80,7 +87,11 @@ export async function startServiceRuntime(options: ServiceRuntimeOptions): Promi
           return;
         }
         const handled = await handleHealth(req, res, options);
-        if (!handled) {
+        if (handled) return;
+        const appHandled = options.handleRequest
+          ? await options.handleRequest(req, res)
+          : false;
+        if (!appHandled) {
           sendJson(res, 404, {
             type: "about:blank",
             title: "Not Found",

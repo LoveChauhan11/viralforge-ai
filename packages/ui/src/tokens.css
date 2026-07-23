@@ -1,0 +1,32 @@
+/* ViralForge tokens — cool paper + teal (avoid purple / cream-terracotta defaults). */
+:root {
+  color-scheme: light;
+  --vf-font-display: "Syne", "Segoe UI", sans-serif;
+  --vf-font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --vf-bg: #e8eef2;
+  --vf-bg-elevated: #f7fafc;
+  --vf-ink: #102027;
+  --vf-ink-muted: #4a5c66;
+  --vf-line: #c5d0d8;
+  --vf-accent: #0f766e;
+  --vf-accent-ink: #f0fdfa;
+  --vf-success: #166534;
+  --vf-warning: #a16207;
+  --vf-danger: #b91c1c;
+  --vf-focus: #0369a1;
+  --vf-radius: 10px;
+  --vf-touch: 44px;
+  --vf-nav-height: 64px;
+  --vf-shadow: 0 1px 0 rgba(16, 32, 39, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

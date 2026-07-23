@@ -12,7 +12,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@viralforge/config": "workspace:*",
+    "@viralforge/database": "workspace:*",
     "@viralforge/observability": "workspace:*",
+    "@viralforge/queue": "workspace:*",
     "@viralforge/service-kit": "workspace:*"
   },
   "devDependencies": {

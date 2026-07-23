@@ -47,11 +47,31 @@ Seed identity (local only): email `local.dev@example.invalid`. User/workspace ID
 | Service | URL |
 |---|---|
 | Web | http://localhost:3000 |
-| API live | http://localhost:3001/health/live |
-| API ready | http://localhost:3001/health/ready |
+| API live | http://localhost:4000/health/live |
+| API ready | http://localhost:4000/health/ready |
 | MinIO console | http://localhost:9001 |
 
-Exact ports follow `.env.example`.
+Exact ports follow `.env.example` (`PORT=4000`).
+
+## One-command PowerShell (Windows)
+
+From the repo root:
+
+```powershell
+# Full boot: install, infra, migrate/seed, tests, start 4 service windows, smoke-check
+.\scripts\local-up.ps1
+
+# Faster: skip lint/typecheck/test
+.\scripts\local-up.ps1 -SkipTests
+
+# Prep only (no service windows)
+.\scripts\local-up.ps1 -SkipTests -NoStart
+
+# After services are up
+.\scripts\local-up.ps1 -SmokeOnly
+```
+
+If PowerShell blocks the script: `Set-ExecutionPolicy -Scope Process Bypass`.
 
 ## Root commands
 

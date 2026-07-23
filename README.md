@@ -89,6 +89,14 @@ Requires Node.js 22+ (or 24) and pnpm 9.15.9 via Corepack (`corepack enable && c
 
 Full walkthrough: [LOCAL_SETUP.md](docs/04-delivery/LOCAL_SETUP.md). Sprint 0 proof: [SPRINT_0_EVIDENCE.md](docs/05-execution/SPRINT_0_EVIDENCE.md).
 
+On Windows you can run:
+
+```powershell
+.\scripts\local-up.ps1 -SkipTests
+```
+
+Manual sequence:
+
 ```bash
 pnpm install
 cp .env.example .env

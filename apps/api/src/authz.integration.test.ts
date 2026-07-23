@@ -119,11 +119,12 @@ describe("API authz (Fastify)", () => {
 
   it("records audit without email payloads", async () => {
     const { auditEvents } = await import("@viralforge/database");
-    const rows = await db.select().from(auditEvents).limit(100);
-    const forWs = rows.filter((row) => row.targetId === wsA);
+    const rows = await db.select().from(auditEvents);
+    const forWs = rows.filter((row) => row.workspaceId === wsA || row.targetId === wsA);
     expect(forWs.length).toBeGreaterThan(0);
     for (const row of forWs) {
       expect(JSON.stringify(row.metadata)).not.toContain("@example");
+      expect(JSON.stringify(row)).not.toContain("@example");
     }
   });
 });

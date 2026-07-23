@@ -1,4 +1,10 @@
-export type { ObjectRef, ObjectStorage, SignedUrlKind, SignedUrlResult } from "./types.js";
+export type {
+  MultipartPartSummary,
+  ObjectRef,
+  ObjectStorage,
+  SignedUrlKind,
+  SignedUrlResult,
+} from "./types.js";
 export { InMemoryObjectStorage } from "./types.js";
 export { assertWorkspaceScopedKey, buildObjectKey, redactSignedUrl, StorageError } from "./keys.js";
 export { S3CompatibleObjectStorage } from "./s3.js";

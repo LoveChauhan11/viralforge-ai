@@ -50,10 +50,7 @@ export function buildObjectKey(input: {
 
 /** Strip query/signature material before logging. */
 export function redactSignedUrl(url: string): string {
-  try {
-    const parsed = new URL(url);
-    return `${parsed.origin}${parsed.pathname}?[redacted]`;
-  } catch {
-    return "[redacted-url]";
-  }
+  const q = url.indexOf("?");
+  if (q === -1) return url;
+  return `${url.slice(0, q)}?[redacted]`;
 }

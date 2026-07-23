@@ -4,7 +4,7 @@ This is the living index from product intent to implementation and evidence. Cur
 
 | ID | Requirement | Source | Target area | Initial evidence |
 |---|---|---|---|---|
-| VF-P01 | Local media upload and managed asset library | Product requirements | Web/API/storage | Sprint 1 |
+| VF-P01 | Local media upload and managed asset library | Product requirements | Web/API/storage | S1-01 upload API + sessions; library UX S1-07 |
 | VF-P02 | Automatic media understanding and clip selection | Product requirements | AI/media workers | Sprint 2 |
 | VF-P03 | Adaptive 15–30-second vertical story with optional exact-30 mode and deterministic render | Product/media specs | Planner/media worker | S2-07, S3-01–06, E2E-AI-03 |
 | VF-P04 | Preview and manual override | Product/UX | Web/API | Sprint 3 |

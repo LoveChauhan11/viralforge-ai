@@ -72,6 +72,11 @@ const secretsSchema = z.object({
     .enum(["true", "false"])
     .default("true")
     .transform((v) => v === "true"),
+  maxUploadBytes: z.coerce.number().int().positive().default(2_147_483_648),
+  uploadPartBytes: z.coerce.number().int().positive().default(16_777_216),
+  uploadSessionTtlHours: z.coerce.number().int().positive().default(24),
+  signedUrlTtlSeconds: z.coerce.number().int().positive().default(600),
+  maxWorkspaceAssets: z.coerce.number().int().positive().default(100),
   aiApiKey: optionalString(),
   youtubeClientId: optionalString(),
   youtubeClientSecret: optionalString(),
@@ -107,6 +112,11 @@ function fromEnv(env: NodeJS.ProcessEnv): Record<string, unknown> {
     objectStorageAccessKeyId: env.OBJECT_STORAGE_ACCESS_KEY_ID,
     objectStorageSecretAccessKey: env.OBJECT_STORAGE_SECRET_ACCESS_KEY,
     objectStorageForcePathStyle: env.OBJECT_STORAGE_FORCE_PATH_STYLE,
+    maxUploadBytes: env.MAX_UPLOAD_BYTES,
+    uploadPartBytes: env.UPLOAD_PART_BYTES,
+    uploadSessionTtlHours: env.UPLOAD_SESSION_TTL_HOURS,
+    signedUrlTtlSeconds: env.SIGNED_URL_TTL_SECONDS,
+    maxWorkspaceAssets: env.MAX_PROJECT_ASSETS,
     aiApiKey: env.AI_API_KEY,
     youtubeClientId: env.YOUTUBE_CLIENT_ID,
     youtubeClientSecret: env.YOUTUBE_CLIENT_SECRET,

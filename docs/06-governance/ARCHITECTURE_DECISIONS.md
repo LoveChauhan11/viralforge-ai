@@ -83,3 +83,4 @@ Each new ADR must state context, decision, alternatives, consequences, and migra
 | [ADR-020](adr/ADR-020-opentelemetry.md) | Accepted | OTel API/SDK; W3C `traceparent` on jobs |
 | [ADR-021](adr/ADR-021-containers-railway.md) | Accepted | Monorepo Dockerfile targets; migrate-as-release; non-root; FFmpeg media-only |
 | [ADR-022](adr/ADR-022-ci-supply-chain.md) | Accepted | GitHub Actions; Gitleaks; Dependency Review; CodeQL; Trivy |
+| [ADR-023](adr/ADR-023-resumable-multipart-uploads.md) | Accepted | Workspace-scoped upload paths; multipart ObjectStorage; minimal assets on complete |

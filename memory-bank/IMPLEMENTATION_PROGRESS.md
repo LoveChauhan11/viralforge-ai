@@ -4,15 +4,13 @@ Status values: `not-started`, `in-progress`, `blocked`, `implemented`, `evidence
 
 | Sprint | Scope | Status | Exit evidence |
 |---|---|---|---|
-| 0 | Platform foundation | evidenced | `docs/05-execution/SPRINT_0_EVIDENCE.md`; S0-01–S0-16 |
-| 1 | Upload and media intelligence | not-started | — |
+| 0 | Platform foundation | evidenced | `docs/05-execution/SPRINT_0_EVIDENCE.md` |
+| 1 | Upload and media intelligence | in-progress | S1-01 evidenced |
 | 2–6 | later | not-started | — |
 
-## Sprint 0 tasks
+## Sprint 1 tasks
 
 | ID | Status | Evidence |
 |---|---|---|
-| S0-01–S0-13 | evidenced | prior |
-| S0-14 | evidenced | Dockerfile targets; Railway TOMLs; migrate one-shot; non-root; FFmpeg media-only; ADR-021 |
-| S0-15 | evidenced | `.github/workflows/ci.yml` + dependency-review; Gitleaks; CodeQL; Trivy; drift scripts; ADR-022; format:check + drift pass locally |
-| S0-16 | evidenced | LOCAL_SETUP, PROVIDER_EXTENSION, SPRINT_0_EVIDENCE; updated matrix/traceability/risks/ops/README |
+| S1-01 | evidenced | Multipart ObjectStorage; migration `0001_*`; upload API; ADR-023; API IT 3/3 resume/complete/abort + storage reconcile; `@viralforge/api` 18/18 |
+| S1-02–S1-10 | not-started | — |

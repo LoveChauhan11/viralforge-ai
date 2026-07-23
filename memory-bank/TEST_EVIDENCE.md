@@ -20,3 +20,4 @@
 | 2026-07-23 | Docker Desktop | S0-14 | `docker build` targets api/web/migrate/scheduler/worker-*; `id`=viralforge; media has ffmpeg; web has standalone server.js | pass | ADR-021; infra/railway/*; no durable VOLUME |
 | 2026-07-23 | local | S0-15 | `pnpm format:check`; `pnpm check:migration-drift`; `pnpm check:contract-drift`; workflows + ADR-022 present | pass | `.github/workflows/ci.yml`; dependency-review; `.gitleaks.toml`; CI_AND_SUPPLY_CHAIN.md |
 | 2026-07-23 | local | S0-16 | handoff docs + traceability/risk/env updates | pass | SPRINT_0_EVIDENCE.md; LOCAL_SETUP.md; PROVIDER_EXTENSION.md |
+| 2026-07-23 | local Postgres + memory storage | S1-01 | `pnpm --filter @viralforge/storage test` (5); `pnpm --filter @viralforge/api test` (18 incl 3 upload IT); migrate `0001`; typecheck/lint api | pass | ADR-023; resume after partial part; idempotent complete/abort; MIME/size/viewer/cross-tenant; object_references reconcile |

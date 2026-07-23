@@ -24,12 +24,12 @@
     "generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@viralforge/storage": "workspace:*",
     "drizzle-orm": "^0.40.0",
     "postgres": "^3.4.5",
     "uuidv7": "^1.0.2"
   },
   "devDependencies": {
-    "@viralforge/storage": "workspace:*",
     "@viralforge/tsconfig": "workspace:*",
     "drizzle-kit": "^0.30.5",
     "tsx": "^4.19.3",

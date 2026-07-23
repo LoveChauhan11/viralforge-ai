@@ -32,7 +32,7 @@ describe("object key strategy", () => {
 });
 
 describe("InMemoryObjectStorage", () => {
-  it("puts, heads, signs, and deletes without local disk", async () => {
+  it("puts, heads, signs, deletes, and completes multipart without local disk", async () => {
     const storage = createObjectStorage({ mode: "memory" });
     const key = buildObjectKey({
       workspaceId: workspaceA,
@@ -58,6 +58,37 @@ describe("InMemoryObjectStorage", () => {
     await storage.deleteObject(workspaceA, key);
     expect(await storage.headObject(workspaceA, key)).toBeNull();
     await storage.deleteObject(workspaceA, key);
+
+    const { multipartUploadId } = await storage.createMultipartUpload(
+      workspaceA,
+      key,
+      "video/mp4",
+    );
+    const partA = new TextEncoder().encode("hello ");
+    const partB = new TextEncoder().encode("world");
+    const uploadedA = await storage.uploadPart(workspaceA, key, multipartUploadId, 1, partA);
+    const uploadedB = await storage.uploadPart(workspaceA, key, multipartUploadId, 2, partB);
+    const listed = await storage.listMultipartParts(workspaceA, key, multipartUploadId);
+    expect(listed).toHaveLength(2);
+    const signedPart = await storage.createSignedUploadPartUrl(
+      workspaceA,
+      key,
+      multipartUploadId,
+      1,
+      60,
+    );
+    expect(signedPart.kind).toBe("upload_part");
+    expect(redactSignedUrl(signedPart.url)).not.toContain("sig=");
+
+    const completed = await storage.completeMultipartUpload(workspaceA, key, multipartUploadId, [
+      { partNumber: 1, etag: uploadedA.etag },
+      { partNumber: 2, etag: uploadedB.etag },
+    ]);
+    expect(completed.byteSize).toBe(partA.byteLength + partB.byteLength);
+    expect(await storage.headObject(workspaceA, key)).toEqual({
+      contentType: "video/mp4",
+      byteSize: completed.byteSize,
+    });
   });
 
   it("rejects put with unscoped key", async () => {

@@ -8,7 +8,9 @@ import { randomUUID } from "node:crypto";
 import { ZodError } from "zod";
 import type { ApiDeps } from "./deps.js";
 import { registerJobRoutes } from "./routes/jobs.js";
+import { registerUploadRoutes } from "./routes/uploads.js";
 import { registerWorkspaceRoutes } from "./routes/workspaces.js";
+import { UploadError } from "./uploads/rules.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -116,6 +118,14 @@ export async function buildApiApp(deps: ApiDeps): Promise<FastifyInstance> {
       return;
     }
 
+    if (error instanceof UploadError) {
+      void reply
+        .status(error.status)
+        .header("content-type", "application/problem+json; charset=utf-8")
+        .send(error.toProblemDetails(requestId));
+      return;
+    }
+
     if (error instanceof ZodError) {
       void reply
         .status(400)
@@ -180,6 +190,7 @@ export async function buildApiApp(deps: ApiDeps): Promise<FastifyInstance> {
 
   await registerWorkspaceRoutes(app, deps);
   await registerJobRoutes(app, deps);
+  await registerUploadRoutes(app, deps);
 
   return app;
 }

@@ -1,7 +1,15 @@
-export type WorkspaceRole = "owner" | "admin" | "creator" | "editor" | "viewer";
-
 export type Permission =
-  "workspace:read" | "workspace:manage_members" | "job:create" | "job:read" | "job:cancel";
+  | "workspace:read"
+  | "workspace:manage_members"
+  | "job:create"
+  | "job:read"
+  | "job:cancel"
+  | "upload:create"
+  | "upload:read"
+  | "upload:abort"
+  | "asset:read";
+
+export type WorkspaceRole = "owner" | "admin" | "creator" | "editor" | "viewer";
 
 export type Principal = {
   userId: string;
@@ -50,6 +58,8 @@ export interface AuthzAuditWriter {
   record(event: AuditAuthzEvent): Promise<void>;
 }
 
+const ALL_UPLOAD_WRITE: Permission[] = ["upload:create", "upload:read", "upload:abort", "asset:read"];
+
 const ROLE_PERMISSIONS: Record<WorkspaceRole, ReadonlySet<Permission>> = {
   owner: new Set([
     "workspace:read",
@@ -57,6 +67,7 @@ const ROLE_PERMISSIONS: Record<WorkspaceRole, ReadonlySet<Permission>> = {
     "job:create",
     "job:read",
     "job:cancel",
+    ...ALL_UPLOAD_WRITE,
   ]),
   admin: new Set([
     "workspace:read",
@@ -64,10 +75,23 @@ const ROLE_PERMISSIONS: Record<WorkspaceRole, ReadonlySet<Permission>> = {
     "job:create",
     "job:read",
     "job:cancel",
+    ...ALL_UPLOAD_WRITE,
   ]),
-  creator: new Set(["workspace:read", "job:create", "job:read", "job:cancel"]),
-  editor: new Set(["workspace:read", "job:create", "job:read", "job:cancel"]),
-  viewer: new Set(["workspace:read", "job:read"]),
+  creator: new Set([
+    "workspace:read",
+    "job:create",
+    "job:read",
+    "job:cancel",
+    ...ALL_UPLOAD_WRITE,
+  ]),
+  editor: new Set([
+    "workspace:read",
+    "job:create",
+    "job:read",
+    "job:cancel",
+    ...ALL_UPLOAD_WRITE,
+  ]),
+  viewer: new Set(["workspace:read", "job:read", "upload:read", "asset:read"]),
 };
 
 export function roleAllows(role: WorkspaceRole, permission: Permission): boolean {

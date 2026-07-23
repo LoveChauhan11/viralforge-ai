@@ -1,4 +1,5 @@
 import {
+  bigint,
   integer,
   jsonb,
   pgTable,
@@ -10,6 +11,7 @@ import {
   varchar,
   index,
   boolean,
+  char,
 } from "drizzle-orm/pg-core";
 
 const timestamps = {
@@ -204,5 +206,89 @@ export const objectReferences = pgTable(
   (t) => [
     uniqueIndex("object_references_object_key_uidx").on(t.objectKey),
     index("object_references_workspace_idx").on(t.workspaceId, t.state),
+  ],
+);
+
+export const uploadSessions = pgTable(
+  "upload_sessions",
+  {
+    id: uuid("id").primaryKey(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id),
+    createdBy: uuid("created_by").references(() => users.id),
+    objectKey: text("object_key").notNull(),
+    filename: varchar("filename", { length: 255 }).notNull(),
+    declaredMime: varchar("declared_mime", { length: 120 }).notNull(),
+    declaredBytes: bigint("declared_bytes", { mode: "number" }).notNull(),
+    expectedSha256: char("expected_sha256", { length: 64 }).notNull(),
+    multipartUploadId: text("multipart_upload_id").notNull(),
+    partSize: integer("part_size").notNull(),
+    partCount: integer("part_count").notNull(),
+    state: varchar("state", { length: 20 }).notNull().default("uploading"),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    abortedAt: timestamp("aborted_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("upload_sessions_object_key_uidx").on(t.objectKey),
+    index("upload_sessions_workspace_state_idx").on(t.workspaceId, t.state),
+    index("upload_sessions_expires_idx").on(t.expiresAt),
+  ],
+);
+
+export const uploadParts = pgTable(
+  "upload_parts",
+  {
+    id: uuid("id").primaryKey(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id),
+    uploadSessionId: uuid("upload_session_id")
+      .notNull()
+      .references(() => uploadSessions.id, { onDelete: "cascade" }),
+    partNumber: integer("part_number").notNull(),
+    etag: varchar("etag", { length: 255 }),
+    bytes: integer("bytes"),
+    checksum: varchar("checksum", { length: 128 }),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex("upload_parts_session_part_uidx").on(t.uploadSessionId, t.partNumber),
+    index("upload_parts_workspace_idx").on(t.workspaceId),
+  ],
+);
+
+export const assets = pgTable(
+  "assets",
+  {
+    id: uuid("id").primaryKey(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id),
+    uploadSessionId: uuid("upload_session_id").references(() => uploadSessions.id),
+    originalFilename: varchar("original_filename", { length: 255 }).notNull(),
+    mediaType: varchar("media_type", { length: 20 }).notNull(),
+    objectKey: text("object_key").notNull(),
+    sha256: char("sha256", { length: 64 }).notNull(),
+    bytes: bigint("bytes", { mode: "number" }).notNull(),
+    mimeType: varchar("mime_type", { length: 120 }).notNull(),
+    durationMs: integer("duration_ms"),
+    width: integer("width"),
+    height: integer("height"),
+    rotation: smallint("rotation"),
+    frameRate: varchar("frame_rate", { length: 20 }),
+    capturedAt: timestamp("captured_at", { withTimezone: true }),
+    state: varchar("state", { length: 40 }).notNull().default("validating"),
+    safeErrorCode: varchar("safe_error_code", { length: 80 }),
+    analysisVersion: varchar("analysis_version", { length: 40 }),
+    deleteAfter: timestamp("delete_after", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("assets_object_key_uidx").on(t.objectKey),
+    uniqueIndex("assets_upload_session_uidx").on(t.uploadSessionId),
+    index("assets_workspace_state_idx").on(t.workspaceId, t.state),
   ],
 );

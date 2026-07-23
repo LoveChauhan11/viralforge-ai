@@ -2,6 +2,7 @@ import { createLocalAuthProvider, LOCAL_USER_HEADER, type AuthProvider } from "@
 import { loadServiceConfig, toLogSafeConfig, type AppEnv } from "@viralforge/config";
 import { createDb, findActiveMembership, recordAuthzAudit, userExists } from "@viralforge/database";
 import { createLogger, initTelemetry, shutdownTelemetry } from "@viralforge/observability";
+import { createObjectStorage } from "@viralforge/storage";
 import { buildApiApp } from "./app.js";
 
 const serviceName = "api";
@@ -24,6 +25,19 @@ const auth: AuthProvider = createLocalAuthProvider({
   userExists: (id) => userExists(db, id),
 });
 
+const storage =
+  config.objectStorageAccessKeyId && config.objectStorageSecretAccessKey
+    ? createObjectStorage({
+        mode: "s3",
+        endpoint: config.objectStorageEndpoint,
+        region: config.objectStorageRegion,
+        bucket: config.objectStorageBucket,
+        accessKeyId: config.objectStorageAccessKeyId,
+        secretAccessKey: config.objectStorageSecretAccessKey,
+        forcePathStyle: config.objectStorageForcePathStyle,
+      })
+    : createObjectStorage({ mode: "memory" });
+
 const app = await buildApiApp({
   serviceName,
   appEnv: config.appEnv,
@@ -37,6 +51,14 @@ const app = await buildApiApp({
     record: (event) => recordAuthzAudit(db, event),
   },
   logger,
+  storage,
+  uploadLimits: {
+    maxUploadBytes: config.maxUploadBytes,
+    uploadPartBytes: config.uploadPartBytes,
+    uploadSessionTtlHours: config.uploadSessionTtlHours,
+    signedUrlTtlSeconds: config.signedUrlTtlSeconds,
+    maxWorkspaceAssets: config.maxWorkspaceAssets,
+  },
   rateLimit: async () => {
     // Hook only — Redis-backed limiter arrives with quota work.
   },
@@ -49,6 +71,8 @@ logger.info("listening", {
   port: config.port,
   localUserHeader: LOCAL_USER_HEADER,
   framework: "fastify",
+  storageMode:
+    config.objectStorageAccessKeyId && config.objectStorageSecretAccessKey ? "s3" : "memory",
 });
 
 const close = async (): Promise<void> => {

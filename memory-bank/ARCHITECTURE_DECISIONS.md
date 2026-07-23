@@ -22,5 +22,6 @@ This is an index, not a replacement for ADR files. Accepted history is append-on
 | ADR-020 | accepted | OpenTelemetry API/SDK; InMemory exporters; W3C traceparent on jobs | `docs/06-governance/adr/ADR-020-opentelemetry.md` |
 | ADR-021 | accepted | Monorepo Dockerfile targets; Railway migrate-as-release; non-root; FFmpeg media-only | `docs/06-governance/adr/ADR-021-containers-railway.md` |
 | ADR-022 | accepted | GitHub Actions CI; Gitleaks; Dependency Review; CodeQL; Trivy; drift gates | `docs/06-governance/adr/ADR-022-ci-supply-chain.md` |
+| ADR-023 | accepted | Workspace-scoped multipart uploads; ObjectStorage multipart port; assets on complete | `docs/06-governance/adr/ADR-023-resumable-multipart-uploads.md` |
 
 Sprint 0 ADRs for ORM, auth, storage, providers, OTel, containers, and CI are recorded. Error-tracking vendor deferred (`R-16`).

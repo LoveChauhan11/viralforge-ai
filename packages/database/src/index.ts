@@ -31,3 +31,14 @@ export {
   getObjectReference,
   registerObjectReference,
 } from "./objects.js";
+export {
+  abortUploadSession,
+  completeUploadSession,
+  countActiveAssets,
+  getAssetByUploadSession,
+  getUploadSession,
+  insertUploadSession,
+  listPersistedUploadParts,
+  upsertUploadPartRecord,
+} from "./uploads.js";
+export type { AssetRow, UploadSessionRow } from "./uploads.js";

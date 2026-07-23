@@ -1,0 +1,37 @@
+---
+description: ViralForge AI repository-wide execution rules
+alwaysApply: true
+---
+
+# ViralForge AI / ForgeOS
+
+Read `AGENTS.md`, `README.md`, and the relevant documents under `docs/` before implementing.
+
+## Source of truth
+
+Security/privacy > accepted ADRs > product requirements > API/data contracts > engineering specifications > implementation convenience.
+
+## Execution
+
+- Start from `docs/05-execution/CURSOR_MASTER_PROMPT.md`.
+- Execute one backlog item at a time from `docs/05-execution/SPRINT_0_BACKLOG.md`.
+- Do not begin Sprint 1 until every Sprint 0 exit gate is evidenced.
+- Use bounded subagents for independent domains; one lead agent integrates and verifies.
+- Make small commits tied to backlog IDs and include tests in the same change.
+- Record material unspecified decisions as ADRs before implementation.
+
+## Engineering boundaries
+
+- Strict TypeScript and a pnpm monorepo.
+- Modular monolith with separate web, API, and worker entrypoints.
+- PostgreSQL is authoritative; Redis and derived media are recoverable.
+- Durable binaries belong in object storage, never local Railway disk.
+- AI produces schema-validated plans; deterministic code executes them.
+- Every write and asynchronous job is tenant-authorized and idempotent.
+- All providers must have fake adapters so local development needs no paid keys.
+- Never commit secrets, private media, scraped protected data, or copyrighted audio.
+- Preserve the YouTube Option 1 music handoff.
+
+## Required proof
+
+Do not mark work complete without commands run, test output, migration status, responsive evidence where applicable, and remaining risks. Update traceability and handoff documents as the implementation evolves.

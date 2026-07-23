@@ -1,0 +1,40 @@
+{
+  "name": "viralforge-ai",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "ViralForge AI / ForgeOS monorepo",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.14.0 <25",
+    "pnpm": ">=9.15.0 <10"
+  },
+  "scripts": {
+    "preinstall": "node ./scripts/check-engines.mjs",
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "vitest run --config vitest.scripts.config.ts && turbo run test",
+    "test:e2e": "turbo run test:e2e --filter=@viralforge/web",
+    "migrate": "turbo run migrate --filter=@viralforge/database",
+    "seed": "turbo run seed --filter=@viralforge/database",
+    "infra:up": "node ./scripts/infra.mjs up",
+    "infra:down": "node ./scripts/infra.mjs down",
+    "infra:reset": "node ./scripts/infra.mjs reset",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.13.10",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^3.0.8"
+  }
+}

@@ -73,3 +73,11 @@ Create additional ADRs during Sprint 0 for:
 - Error tracking vendor.
 
 Each ADR must state context, decision, alternatives, consequences, and migration/exit strategy.
+
+## Sprint 0 ADRs recorded
+
+| ADR | Status | Decision |
+|---|---|---|
+| [ADR-011](adr/ADR-011-toolchain-and-package-manager.md) | Accepted | Node 22–24, pnpm 9.15.9, Turborepo, TypeScript 5.8, ESLint 9, Vitest 3, Playwright |
+| [ADR-012](adr/ADR-012-configuration-validation.md) | Accepted | Zod schema-validated config; secret redaction; fake-local defaults |
+| [ADR-013](adr/ADR-013-drizzle-orm.md) | Accepted | Drizzle ORM + drizzle-kit migrations for PostgreSQL |

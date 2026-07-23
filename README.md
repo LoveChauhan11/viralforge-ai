@@ -79,4 +79,19 @@ The first production release supports one creator workspace, local uploads, auto
 
 Clone the repository into Cursor, create a feature branch, and open [CURSOR_MASTER_PROMPT.md](docs/05-execution/CURSOR_MASTER_PROMPT.md). Run the start-sprint command, execute Sprint 0 item by item, and advance through Sprints 1–6 only after each sprint exit and [Definition of Done](docs/05-execution/DEFINITION_OF_DONE.md) are fully evidenced. Keep `memory-bank/` current after every task.
 
+### Local toolchain (Sprint 0 foundation)
+
+Requires Node.js 22+ (or 24) and pnpm 9.15.9 via Corepack (`corepack enable && corepack prepare pnpm@9.15.9 --activate`). If Corepack cannot write to the Node install directory, use `npx pnpm@9.15.9`.
+
+```bash
+pnpm install
+pnpm build
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm infra:up    # needs Docker: Postgres, Redis, MinIO
+```
+
+Copy `.env.example` to `.env` for local defaults. Fake AI/auth providers need no paid keys.
+
 Executable code, CI, containers, and Railway service configuration are deliberate Sprint 0 outputs. The repository currently contains the complete product/architecture/execution specification and safe bootstrap controls; it does not pretend unbuilt services are deployable.

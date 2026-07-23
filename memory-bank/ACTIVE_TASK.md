@@ -2,12 +2,10 @@
 
 Updated: 2026-07-23 UTC
 
-- Task ID: `S0-01`
-- Objective: establish deterministic repository/toolchain foundation.
+- Task ID: `S0-06`
+- Objective: auth interface, safe local implementation, request principal, workspace resolution, authorization guards.
 - Status: not-started.
-- Owner/agent: lead architect to assign.
-- Dependencies: accepted specification package.
-- Blockers: none; paid keys are not blockers because fake adapters are mandatory.
-- Immediate next action: execute `.cursor/commands/start-sprint.md` with Sprint 0, verify repository state, then begin S0-01.
-
-Only one task may be marked active here. Parallel tasks belong in the lead plan and must have explicit owners.
+- Owner/agent: lead architect.
+- Dependencies: S0-05 evidenced (Postgres up, migrations/seed/tenancy tests pass).
+- Blockers: none.
+- Immediate next action: ADR for local auth adapter; implement auth package + API guards with cross-tenant negative tests.

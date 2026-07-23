@@ -5,7 +5,7 @@ alwaysApply: true
 
 # ViralForge AI / ForgeOS
 
-Read `AGENTS.md`, `README.md`, and the relevant documents under `docs/` before implementing.
+Read `AGENTS.md`, `README.md`, all `memory-bank/*.md`, and the relevant documents under `docs/` before implementing. Use the matching `.cursor/agents/*.md` role contract and `.cursor/commands/*.md` workflow.
 
 ## Source of truth
 
@@ -14,11 +14,13 @@ Security/privacy > accepted ADRs > product requirements > API/data contracts > e
 ## Execution
 
 - Start from `docs/05-execution/CURSOR_MASTER_PROMPT.md`.
-- Execute one backlog item at a time from `docs/05-execution/SPRINT_0_BACKLOG.md`.
+- Execute one backlog item at a time from the current `docs/05-execution/SPRINT_<n>_BACKLOG.md`.
 - Do not begin Sprint 1 until every Sprint 0 exit gate is evidenced.
 - Use bounded subagents for independent domains; one lead agent integrates and verifies.
 - Make small commits tied to backlog IDs and include tests in the same change.
 - Record material unspecified decisions as ADRs before implementation.
+- Update the memory bank after every completed task and before every handoff.
+- Do not advance any sprint until its exit gate and the Definition of Done are evidenced.
 
 ## Engineering boundaries
 

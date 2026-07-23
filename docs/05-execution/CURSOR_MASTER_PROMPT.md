@@ -9,13 +9,15 @@ Before creating code, read:
 1. `AGENTS.md`
 2. `.cursor/rules/viralforge.mdc`
 3. `README.md`
-4. All documents under `docs/`
+4. All files under `memory-bank/`
+5. The applicable role definitions under `.cursor/agents/`
+6. All documents under `docs/`
 
-Use `SPRINT_0_BACKLOG.md` as the executable work queue, `DEFINITION_OF_DONE.md` as the release gate, `REQUIREMENTS_TRACEABILITY.md` as the evidence index, and `CURSOR_HANDOFF_CHECKLIST.md` as the start/end checklist.
+Use `SPRINT_0_BACKLOG.md` through `SPRINT_6_BACKLOG.md` sequentially as executable work queues, `DEFINITION_OF_DONE.md` as the release gate, `REQUIREMENTS_TRACEABILITY.md` as the evidence index, and `CURSOR_HANDOFF_CHECKLIST.md` as the start/end checklist. Use `.cursor/commands/start-sprint.md` at every sprint boundary.
 
 ## Operating rules
 
-1. Start with Sprint 0 only. Do not jump to feature screens before foundations work.
+1. Start with Sprint 0 only. Advance sequentially; do not jump to feature screens before their foundations or exit evidence.
 2. Inspect the repository and create a dependency-aware implementation plan mapped to S0 IDs.
 3. Use subagents by bounded domain when available: platform, web UX, media, AI/evaluation, data/API, QA/security. One lead agent owns integration.
 4. Keep a modular-monolith architecture with deployable workers.
@@ -29,6 +31,8 @@ Use `SPRINT_0_BACKLOG.md` as the executable work queue, `DEFINITION_OF_DONE.md` 
 12. Make small, reviewable commits tied to backlog IDs. Do not leave hidden TODOs for security, tenancy, deletion, rights, or failure handling.
 13. Update traceability, risks, environment ownership, cost controls, and ADRs during implementation.
 14. Do not declare a backlog item complete based only on files created; demonstrate its behavior and evidence.
+15. Keep `memory-bank/CURRENT_STATE.md`, `ACTIVE_TASK.md`, `IMPLEMENTATION_PROGRESS.md`, `KNOWN_ISSUES.md`, `TEST_EVIDENCE.md`, and `NEXT_ACTIONS.md` current.
+16. Treat the exact database, API, event/job, AI, FFmpeg, authorization, configuration, and E2E catalogues as binding public/internal contracts.
 
 ## First response before implementation
 
@@ -90,3 +94,5 @@ When a choice is not specified, create a short ADR before implementing if it aff
 ## Handoff after each sprint
 
 Follow `DEFINITION_OF_DONE.md`. Report completed scope, working vertical flows, architecture decisions, commands, migrations, tests/results, deployed services, observability, security/privacy/rights review, cost implications, remaining risks, owners, and exact next-sprint entry criteria.
+
+Run `.cursor/commands/create-handoff.md`; update the memory bank and traceability in the same change. Do not start the next sprint until the prior sprint exit is accepted.

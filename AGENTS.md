@@ -1,6 +1,6 @@
 # Agent Working Agreement
 
-This repository is an executable product blueprint. Read README.md and all documents under docs before changing architecture or beginning a sprint.
+This repository is an executable product blueprint. Read README.md, all files under `memory-bank/`, the current sprint backlog, the applicable `.cursor/agents/` role contract, and relevant documents under `docs/` before changing architecture or beginning a sprint.
 
 ## Priority
 
@@ -26,6 +26,7 @@ Security/privacy → accepted architecture decisions → product requirements �
 - Test responsive UI from 360 px.
 - Never add scraping, copyright circumvention, secret material, or private sample media.
 - Run all quality gates before handoff.
+- Use `.cursor/commands/` workflows and update the memory bank after every completed task.
 
 ## Handoff
 

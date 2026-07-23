@@ -32,8 +32,23 @@ Original, licensed, or creator-owned audio may be rendered automatically when ri
 - [Testing strategy](docs/04-delivery/TEST_STRATEGY.md)
 - [Operations](docs/04-delivery/OPERATIONS.md)
 - [Implementation roadmap](docs/05-execution/IMPLEMENTATION_ROADMAP.md)
+- [Sprint 0 executable backlog](docs/05-execution/SPRINT_0_BACKLOG.md)
+- [Definition of done](docs/05-execution/DEFINITION_OF_DONE.md)
+- [Cursor handoff checklist](docs/05-execution/CURSOR_HANDOFF_CHECKLIST.md)
 - [Cursor master prompt](docs/05-execution/CURSOR_MASTER_PROMPT.md)
 - [Architecture decisions](docs/06-governance/ARCHITECTURE_DECISIONS.md)
+- [Requirements traceability](docs/06-governance/REQUIREMENTS_TRACEABILITY.md)
+- [Risk register](docs/06-governance/RISK_REGISTER.md)
+- [Cost model](docs/06-governance/COST_MODEL.md)
+- [Environment matrix](docs/06-governance/ENVIRONMENT_MATRIX.md)
+
+Repository controls:
+
+- [Agent working agreement](AGENTS.md)
+- [Cursor repository rule](.cursor/rules/viralforge.mdc)
+- [Contribution rules](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Safe environment template](.env.example)
 
 ## MVP definition
 
@@ -51,4 +66,6 @@ The first production release supports one creator workspace, local uploads, auto
 
 ## Start here
 
-Open [CURSOR_MASTER_PROMPT.md](docs/05-execution/CURSOR_MASTER_PROMPT.md) in Cursor and execute Sprint 0. The prompt defines agent roles, sequencing, gates, and the definition of done.
+Clone the repository into Cursor, create a feature branch, and open [CURSOR_MASTER_PROMPT.md](docs/05-execution/CURSOR_MASTER_PROMPT.md). Execute Sprint 0 only, item by item from [SPRINT_0_BACKLOG.md](docs/05-execution/SPRINT_0_BACKLOG.md), and do not advance until [DEFINITION_OF_DONE.md](docs/05-execution/DEFINITION_OF_DONE.md) is fully evidenced.
+
+Executable code, CI, containers, and Railway service configuration are deliberate Sprint 0 outputs. The repository currently contains the complete product/architecture/execution specification and safe bootstrap controls; it does not pretend unbuilt services are deployable.

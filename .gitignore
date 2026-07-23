@@ -1,0 +1,57 @@
+# Dependencies and build output
+node_modules/
+.pnpm-store/
+.turbo/
+dist/
+build/
+.next/
+coverage/
+playwright-report/
+test-results/
+
+# Runtime and local state
+*.log
+*.pid
+.cache/
+.tmp/
+tmp/
+data/
+uploads/
+renders/
+artifacts/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Media must never be committed
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+*.heic
+*.raw
+
+# Keep only explicit, synthetic fixtures
+!test/fixtures/**/*
+!tests/fixtures/**/*

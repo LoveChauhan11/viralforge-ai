@@ -28,10 +28,15 @@ function Write-Step([string]$Message) {
   Write-Host "==> $Message" -ForegroundColor Cyan
 }
 
-function Invoke-Pnpm([Parameter(ValueFromRemainingArguments = $true)][string[]]$Args) {
-  & npx --yes pnpm@9.15.9 @Args
+function Invoke-Pnpm {
+  param(
+    [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
+    [string[]]$PnpmArgs
+  )
+  Write-Host ("npx pnpm@9.15.9 " + ($PnpmArgs -join " ")) -ForegroundColor DarkGray
+  & npx --yes pnpm@9.15.9 @PnpmArgs
   if ($LASTEXITCODE -ne 0) {
-    throw "pnpm failed ($LASTEXITCODE): pnpm $($Args -join ' ')"
+    throw "pnpm failed ($LASTEXITCODE): pnpm $($PnpmArgs -join ' ')"
   }
 }
 
